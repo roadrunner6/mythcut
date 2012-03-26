@@ -1,0 +1,31 @@
+0.9 - 2012-02-29
+* Ajax interface (started)
+* Nice OOP interface, cleaned up and removed some PHP warnings.
+
+0.8 - 2012-02-25
+* now released under GPLv3 instead of GPLv2
+* 32/64bit fixes thanks to tony.sauri@xtra.co.nz
+* code rework/cleanup
+* Configuration-File
+* fixed a nasty reference instead of copy bug in list iterating
+* separation of logic/presentation
+* HTML fixes for XHTML conformance, now works fine in >= IE7
+* fix Etag handling and efficiance in thumbnail loading
+* Included Tiresias font file
+
+0.7 - 2012-02-21
+* Loading of commercials
+
+0.6 - 2012-02-14
+* Can load commercial breaks and use as cutmarks
+* Option to move the nearest cutpoint to the selected position
+
+0.5 - 2012-02-08
+* Division by zero fixed
+* Delete cutpoint now works
+* Some old stuff remove
+* Sort by size removed, always sorts this way
+* Fluid layout
+
+<= 0.4 - 2012-01-26
+* Initial release, no changelog so far

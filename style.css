@@ -1,0 +1,103 @@
+img.cutted {
+	filter: alpha(opacity = 50);
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+	border-width: 3px;
+	border-style: solid;
+	border-color: white;
+}
+
+img.cutpoint {
+	border-width: 3px;
+	border-style: solid;
+	border-color: red;
+}
+
+img.selected {
+	border-width: 3px;
+	border-style: solid;
+	border-color: yellow;
+}
+
+img.normal {
+	border-width: 3px;
+	border-style: solid;
+	border-color: white;
+}
+
+.title {
+	background: #ccccff;
+	padding: 10px;
+	margin: 0px;
+	border: 1px solid black;
+	font-size: 200%;
+	text-align: center;
+}
+
+.menu {
+	width: 150px;
+	padding: 10px;
+	margin: 0px;
+	margin-top: 0px;
+	float: left;
+	border: 1px solid black;
+	position: fixed;
+}
+
+.movielist {
+	margin-left: 200px;
+}
+
+.subtitle {
+	font-size: 70%;
+}
+
+.description {
+	font-size: 40%;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: left;
+}
+
+.mythcut {
+	font-weight: bold;
+}
+
+.footer {
+	border: 1px solid black;
+	padding: 10px;
+}
+
+.cutlist {
+	font-size: 85%;
+}
+
+.series {
+	background: #d5d5d5;
+	margin: 5px;
+	border: solid black 1px;
+	padding: 10px;
+}
+
+.episode {
+	margin-left: 30px;
+}
+
+.seriestitle {
+	font-size: 120%;
+	font-weigth: bold;
+}
+
+.pagelist {
+	font-size: 120%;
+}
