@@ -1,3 +1,9 @@
+0.13  2012-03-26
+* Moved to GITHUB
+
+0.10-0.12
+* internal testversions, not released
+
 0.9 - 2012-02-29
 * Ajax interface (started)
 * Nice OOP interface, cleaned up and removed some PHP warnings.

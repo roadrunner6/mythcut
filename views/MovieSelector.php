@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function editMovie(selector) {
-	location.href="?action=movie&selectedMovie=" + selector;
+	location.href="?action=movie&selectedMovie=" + selector + '&init=true';
 }
 
 function page(url) {

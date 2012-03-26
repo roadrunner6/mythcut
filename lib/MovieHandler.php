@@ -1,7 +1,7 @@
 <?php
 
 /* ===============================================================
- * MythCut 0.13
+ * MythCut
  * (c) 2011,2012 Mario Weilguni
  * roadrunner6@gmx.at
  * Licenced under GNU General Public Licence Version 3 or higher
@@ -19,6 +19,9 @@ class MovieHandler extends Handler {
 			list($chanid, $starttime) = explode(".", $selectedItem);
 			if(is_numeric($chanid) && is_numeric($starttime)) {
 				$_SESSION['SelectedMovie'] = new Movie($chanid, $starttime);
+				if(Param("init") == "true") {
+					$_SESSION['list'] = null;
+				}
 			}
 		}
 

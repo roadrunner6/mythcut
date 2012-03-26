@@ -1,7 +1,7 @@
 <?php
 
 /* ===============================================================
- * MythCut 0.13
+ * MythCut
  * (c) 2011,2012 Mario Weilguni
  * roadrunner6@gmx.at
  * Licenced under GNU General Public Licence Version 3 or higher
@@ -25,7 +25,13 @@ class ChangelogHandler extends Handler {
 				$viewbag->Releases[] = $release;
 				$release = new StdClass;
 				$release->Items = array();
-				list($version, $date) = explode(" - ", $line);
+				$parts = explode(" - ", $line);
+				$version = $parts[0];
+				if(count($parts) > 1) {
+					$date = $parts[1];
+				} else {
+					$date = '';
+				}
 				$release->Version = $version;
 				$release->Date = $date;
 			}
