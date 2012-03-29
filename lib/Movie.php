@@ -36,7 +36,7 @@ class Movie {
 				null;
 
 				if($selmovie === null || !is_object($selmovie))
-				return null;
+					return null;
 
 				self::$instance = new Movie($selmovie->chanid, $selmovie->starttime);
 			}
