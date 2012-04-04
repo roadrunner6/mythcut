@@ -1,7 +1,7 @@
 <?php
 
 /* ===============================================================
- * MythCut 0.12
+ * MythCut
  * (c) 2011,2012 Mario Weilguni
  * roadrunner6@gmx.at
  * Licenced under GNU General Public Licence Version 3 or higher
@@ -11,9 +11,42 @@
 //ini_set("display_errors", "on");
 //ini_set("error_reporting", E_ALL); // & ~E_NOTICE);
 
-require_once 'config.php';
+// Configarion settings
+require_once dirname(__FILE__) . '/lib/config.php';
 
-define("VERSION", "0.13");
+// Database classes
+require_once dirname(__FILE__) . '/lib/DB.php';
+require_once dirname(__FILE__) . '/lib/SQLParameter.php';
+require_once dirname(__FILE__) . '/lib/SQLException.php';
+require_once dirname(__FILE__) . '/lib/Query.php';
+
+// File classes
+require_once dirname(__FILE__) . '/lib/File.php';
+require_once dirname(__FILE__) . '/lib/TempFile.php';
+
+// Misc classes
+require_once dirname(__FILE__) . '/lib/CutRegion.php';
+require_once dirname(__FILE__) . '/lib/ImageList.php';
+require_once dirname(__FILE__) . '/lib/PreviewImage.php';
+require_once dirname(__FILE__) . '/lib/SelectedMovie.php';
+require_once dirname(__FILE__) . '/lib/ViewBag.php';
+require_once dirname(__FILE__) . '/lib/Thumbnailer.php';
+require_once dirname(__FILE__) . '/lib/JSON.php';
+require_once dirname(__FILE__) . '/lib/Movie.php';
+require_once dirname(__FILE__) . '/lib/Pagelist.php';
+
+// Handler classes
+require_once dirname(__FILE__) . '/lib/Handler.php';
+require_once dirname(__FILE__) . '/lib/ChangelogHandler.php';
+require_once dirname(__FILE__) . '/lib/ErrorHandler.php';
+require_once dirname(__FILE__) . '/lib/LicenseHandler.php';
+require_once dirname(__FILE__) . '/lib/MovieHandler.php';
+require_once dirname(__FILE__) . '/lib/JSONHandler.php';
+require_once dirname(__FILE__) . '/lib/MovieSelectorHandler.php';
+require_once dirname(__FILE__) . '/lib/MovieStripeHandler.php';
+require_once dirname(__FILE__) . '/lib/SaveCutlistHandler.php';
+
+define("VERSION", "0.14");
 
 // CPU Type/Architecture
 if((string)PHP_INT_MAX == '9223372036854775807') {
@@ -55,25 +88,6 @@ function custom_error_handler($number, $string, $file, $line, $context)
 
 
 set_error_handler("custom_error_handler");
-
-
-/**
- * Class autoloader
- * Loads classes in this directory if requested
- * @param string $class_name Name of the requested class
- * @throws Exception
- */
-function __autoload($class_name) {
-	if(!preg_match('!^[a-z][a-z_0-9]*$!i', $class_name))
-	throw new Exception("Invalid class name: " . $class_name);
-
-	$file = dirname(__FILE__) . '/lib/' . $class_name . '.php';
-	if(!is_file($file)) {
-		throw new Exception("Class not found: " . $class_name);
-	}
-
-	include $file;
-}
 
 // Required for packaging/Makefile
 if(@isset($argv) && is_array($argv) && $argv[1] == '--version') {

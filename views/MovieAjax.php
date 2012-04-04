@@ -1,4 +1,4 @@
-<script type="text/javascript" src="movieAjax.js"></script>
+<script type="text/javascript" src="js/movieAjax.js"></script>
 <script type="text/javascript">
 	var cutpoints = [<?php echo $viewbag->CutPoints ?>];
 </script>
@@ -59,16 +59,7 @@
 	<div class="title movielist">
 	<?php echo html($viewbag->Title) ?>
 		<br />
-
-    <?php
-	if(trim($viewbag->Subtitle) == "") {
-    ?>
-
-
-	<form method="post"><p class="subtitle">Change subtitle: <input type="text" name="subtitle" size="50"/><input type="submit" value="Set" name="change_subtitle"/></p></form>
-    <?php } else { 
-      echo html($viewbag->Subtitle);
-    } ?>
+	<?php echo html($viewbag->Subtitle) ?>
     <p class="description"><?php echo html($viewbag->Description) ?></p>	
     </div>
 	
