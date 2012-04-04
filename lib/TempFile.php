@@ -12,7 +12,7 @@ class TempFile extends File {
 	private static $ctr = 0;
 
 	public function __construct($extension = '') {
-		$dir = "/tmp/mythcut";
+		$dir = CACHE_DIR;
 
 		$rand = uniqid(time() . getmypid());
 

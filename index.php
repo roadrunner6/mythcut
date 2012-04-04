@@ -14,6 +14,9 @@
 // Configarion settings
 require_once dirname(__FILE__) . '/lib/config.php';
 
+// Logging
+require_once dirname(__FILE__) . '/lib/Log.php';
+
 // Database classes
 require_once dirname(__FILE__) . '/lib/DB.php';
 require_once dirname(__FILE__) . '/lib/SQLParameter.php';

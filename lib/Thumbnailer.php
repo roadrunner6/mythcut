@@ -43,20 +43,21 @@ class Thumbnailer {
 
 	public function getThumbnailURL($offset, $time = '') {
 		return sprintf("index.php/TN/%d/%d/%d/%.0f/%d.jpg",
-		$this->channel_id,
-		$this->starttime,
-		$this->width(),
-		$offset,
-		$time);
+				$this->channel_id,
+				$this->starttime,
+				$this->width(),
+				$offset,
+				$time);
 	}
 
 	private function getHash() {
 		return sha1(sprintf("%s-%d",
-		$this->stream,
-		$this->width()));
+			    	    $this->stream,
+		   	 	    $this->width()));
 	}
 
 	private function handleRequest($offset, $time) {
+		Log::SetPrefix(sprintf("Thumbnail(%d): ", getmypid()));
 		$hash = $this->getHash();
 		if(isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $hash) {
 			header(getenv("SERVER_PROTOCOL") . " 304 Not Modified");
@@ -67,6 +68,7 @@ class Thumbnailer {
 		$cachedir = CACHE_DIR;
 		umask(077);
 		if(!is_dir($cachedir)) {
+			Log::Info("Creating cache directory %s", $cachedir);
 			@mkdir($cachedir);
 		}
 		$file = $cachedir . '/' . $this->getHash() . '-' . $offset;
@@ -82,6 +84,7 @@ class Thumbnailer {
 			if(array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) && $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
 				header(getenv("SERVER_PROTOCOL") . " 304 Not Modified");
 				header("Content-Length: 0");
+				Log::Debug("request already satisfied by HTTP_IF_MODIFIED_SINCE header, file=%s", $file);
 				exit;
 			}
 
@@ -90,7 +93,10 @@ class Thumbnailer {
 		}
 
 		$outdir = $cachedir . '/' . getmypid();
-		if(!is_dir($outdir)) mkdir($outdir, 0700);
+		if(!is_dir($outdir)) {
+			Log::Debug("Creating work directory %s", $outdir);
+			mkdir($outdir, 0700);
+		}
 
 		$tempfile = new TempFile(".ts");
 		$infile = new File($this->stream, false);
@@ -99,24 +105,29 @@ class Thumbnailer {
 		$infile->close();
 		$tempfile->write($data);
 
-		$cmd = sprintf("%s -zoom -quiet -xy %d -vo jpeg:outdir=%s:maxfiles=1 -ao null %s -frames 1 2>> /tmp/log",
-		MPLAYER,
-		$this->width(),
-		$outdir,
-		escapeshellarg($tempfile->Filename()));
-		//echo $cmd; exit;
+		$cmd = sprintf("%s -nolirc -really-quiet -zoom -quiet -xy %d -vo jpeg:outdir=%s:maxfiles=2 -ao null %s -frames 2 &> /dev/null",
+				MPLAYER,
+				$this->width(),
+				$outdir,
+				escapeshellarg($tempfile->Filename()));
+		$ts = microtime(true);
+		Log::Debug("command=%s", $cmd);
 		exec($cmd);
-		$tempfile = $outdir . '/00000001.jpg';
+		$elapsed = microtime(true) - $ts;
+		Log::Debug("command executed, duration=%.6f sec", $elapsed);
+		$tempfile = $this->chooseBestImage($outdir);
+		Log::Debug("using image %s", $tempfile);
 		if(!is_file($tempfile)) {
+			Log::Error("command failed, command was %s", $cmd);
 			header("HTTP/1.0 404 not found");
 			exit;
 		}
 
-		$im = imagecreatefromjpeg($tempfile);
+		$im = @imagecreatefromjpeg($tempfile);
 		$timestring = sprintf("%02d:%02d:%02d",
-		floor($time/3600),
-		floor(($time % 3600)/60),
-		$time % 60);
+			     	      floor($time/3600),
+ 		                      floor(($time % 3600)/60),
+		                      $time % 60);
 		$this->writeTextAligned($im, self::ALIGN_LEFT, self::ALIGN_TOP, $timestring);
 
 		ob_start();
@@ -124,20 +135,52 @@ class Thumbnailer {
 		$data = ob_get_contents();
 		ob_end_clean();
 
-		unlink($tempfile);
-		rmdir($outdir);
+		$this->cleanDirectory($outdir);
 
 		if($data != '') {
+			Log::Debug("finished generation, Size=%d", strlen($data));
 			header("Content-Type: image/jpeg");
 			file_put_contents($file, $data);
 			$lm = filemtime($file);
 			header("Last-Modified: " . gmdate('D, d M Y H:i:s T', $lm));
 			header("Etag: \"" . $this->getHash() . "-" . $offset . "\"");
 			header("Expires: " . gmdate('D, d M Y H:i:s T', $lm+86400));
+		} else {
+			Log::Error("oops, data is empty, should not happen");
 		}
 
 		print($data);
 		exit;
+	}
+
+	// Some hardware decoders do not work deliver Keyframes at the
+	// position delivered in the mythtv recordedseek table, so two
+	// frames are written. Guess the better suited, currently just
+	// based on the filesize. Not perfect, but ok
+	private function chooseBestImage($dir) {
+		$i1 = $dir . '/00000001.jpg';
+		$i2 = $dir . '/00000002.jpg';
+		if(is_file($i1) && !is_file($i2)) return $i1;
+		if(!is_file($i1) && is_file($i2)) return $i2; // really, that should not happen!
+		$s1 = filesize($i1);
+		$s2 = filesize($i2);
+		
+		if($s1 < $s2 * .5) {
+			// first seems to be broken
+			Log::Debug("first frame seems to be broken, take the 2nd");
+			return $i2;
+		}
+	
+		return $i1;
+	}
+
+	private function cleanDirectory($dir) {
+		$fn = $dir . '/00000001.jpg';
+		Log::Debug($fn);
+		if(is_file($fn)) unlink($fn);
+		$fn = $dir . '/00000002.jpg';
+		if(is_file($fn)) unlink($fn);
+		rmdir($dir);
 	}
 
 	private function writeText(&$im, $x1, $y1, $x2, $y2, $message) {
