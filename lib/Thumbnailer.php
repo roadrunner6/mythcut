@@ -12,7 +12,7 @@ class Thumbnailer {
 	private $channel_id;
 	private $starttime;
 	private $stream;
-	private $w = 100;
+	private $w = 200;
 
 	private static $black = null;
 	private static $white = null;

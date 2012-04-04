@@ -23,11 +23,10 @@ class TempFile extends File {
 
 		do {
 			$name = sprintf("%s/%s-%04d%s",
-			$dir,
-			$rand,
-			self::$ctr++,
-			$extension
-			);
+					$dir,
+					$rand,
+					self::$ctr++,
+					$extension);
 		} while(is_file($name));
 
 		register_shutdown_function(array($this, 'shutdown'));

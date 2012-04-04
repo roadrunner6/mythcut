@@ -23,8 +23,7 @@
 
 	<div class="footer">
 		<div class="left">
-			MythCut <a href="?action=showChangelog" title="Show changelog"><?php echo $viewbag->Version ?>
-			</a>
+			MythCut <a href="?action=showChangelog" title="Show changelog"><?php echo $viewbag->Version ?></a>
 		</div>
 		<div class="right">
 			(c) 2011,2012 Mario Weilguni <a href="?action=showLicense">Licence</a>

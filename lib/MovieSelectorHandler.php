@@ -77,7 +77,7 @@ class MovieSelectorHandler extends Handler {
 		}
 
 		$words =preg_split('!\s+!', $viewbag->Query);
-		$row=0;
+		$row = 0;
 		foreach($words as $v) {
 			$v = trim(chop($v));
 			if($v > '') {

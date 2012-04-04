@@ -7,12 +7,12 @@ Install instructions:
   For ubuntu, this will be /etc/apache2/sites-enabled/mythcut.conf
 
 <Directory /var/www/mythcut/>
-        	DirectoryIndex index.php
+      	DirectoryIndex index.php
 
-            setenv db_server        "ip-address-of-your-db-server"
-            setenv db_name          "mythtv database name, probably mythconverg"
-            setenv db_login         "mythtv"
-            setenv db_password      "your-super-secret-password"
+        setenv db_server        "ip-address-of-your-db-server"
+        setenv db_name          "mythtv database name, probably mythconverg"
+        setenv db_login         "mythtv"
+        setenv db_password      "your-super-secret-password"
 </Directory>
 
 * Then reload your apache (apachectl graceful)

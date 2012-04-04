@@ -28,7 +28,7 @@ class Pagelist {
 
 		$result = array();
 		if($min > 1) {
-			$result[] = $this->GetPageLink(1, '&lt;&lt;');
+			$result[] = $this->GetPageLink(1, '&laquo;');
 			$result[] = $this->GetPageLink($current_page-1, '&lt;');
 		}
 
@@ -38,7 +38,7 @@ class Pagelist {
 
 		if($max < $pages) {
 			$result[] = $this->GetPageLink($current_page+1, '&gt;');
-			$result[] = $this->GetPageLink($pages, '&gt;&gt;');
+			$result[] = $this->GetPageLink($pages, '&raquo;');
 		}
 
 		return $result;

@@ -59,8 +59,8 @@ class JSONHandler extends MovieHandler {
 		  $params->skipTranscoded = Param('skipTranscoded') ? 1 : 0;
 		  $params->skipHasCutlist = Param('skipHasCutlist') ? 1 : 0;
 		  $params->hpp = (int)Param('hpp') > 0 && (int)Param('hpp') <= 1000 ? 
-				(int)Param('hpp') :
-				HPP;
+				 (int)Param('hpp') :
+				 HPP;
 		}
 		$_SESSION['lastMovieSelection'] = $params;
 

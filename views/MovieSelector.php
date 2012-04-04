@@ -24,7 +24,7 @@
 	<button onclick="doSearch(); return false">Search</button>
 	<br/>
 	<div id="episodeShown" style="display:none">
-	Showing only episodes of this series: <b><span id="episodeShownTitle"/></b> <a href="javascript:showAllMovies()">show all movies</a>
+	Showing only episodes of this series: <b><span id="episodeShownTitle"/></b> <a href="javascript:showAllMovies()">Show all movies</a>
 	<input type="hidden" id="episodeFilter" value=""/>
 	</div>
 </div>

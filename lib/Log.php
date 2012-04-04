@@ -55,11 +55,11 @@ class Log {
 	$msec *= 1000;
 	$msec = floor($msec);
         fwrite(self::$fd, sprintf("[%s.%03d]\t%s\t%s%s\n",
-                            date('Y-m-d H:i:s', floor($ts)),
-			    $msec,
-                            $levels[$lvl],
-			    self::$Prefix,
-			    $msg));
+  	                          date('Y-m-d H:i:s', floor($ts)),
+				    $msec,
+                	            $levels[$lvl],
+				    self::$Prefix,
+				    $msg));
         fflush(self::$fd);
         flock(self::$fd, LOCK_UN);
     }
