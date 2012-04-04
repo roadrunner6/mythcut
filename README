@@ -2,8 +2,10 @@ Install instructions:
 * You need at least PHP 5.1
 * You need have mplayer installed
 * copy to a path of your choice, for ubuntu you might want /var/www/mythcut
-* if you have /etc/mythtv/config.xml and it is readable to the apache user, you are done.
-* otherwise, add these lines to your apache config, in an appropriate place, and adapt to your needs. 
+* if you have /etc/mythtv/config.xml and it is readable to the 
+  apache user, you are done.
+* otherwise, add these lines to your apache config, in an appropriate place, 
+  and adapt to your needs. 
   For ubuntu, this will be /etc/apache2/sites-enabled/mythcut.conf
 
 <Directory /var/www/mythcut/>
