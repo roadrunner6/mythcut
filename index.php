@@ -12,7 +12,11 @@
 //ini_set("error_reporting", E_ALL); // & ~E_NOTICE);
 
 // Configarion settings
-require_once dirname(__FILE__) . '/lib/config.php';
+if(is_file(dirname(__FILE__) . '/lib/config.php')) 
+	require_once dirname(__FILE__) . '/lib/config.php';
+else {
+	require_once dirname(__FILE__) . '/lib/config-defaults.php';
+}
 
 // Logging
 require_once dirname(__FILE__) . '/lib/Log.php';

@@ -17,3 +17,10 @@ Install instructions:
 
 * Then reload your apache (apachectl graceful)
 
+
+Configuration
+=============
+There are a few configuration settings, the defaults are found in lib/config-defaults.php. If you want
+to make changes, copy lib/config-defaults.php to lib/config.php and make your changes in this file. This
+file takes precedens over the default-config-file.
+
