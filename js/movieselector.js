@@ -2,10 +2,6 @@ function editMovie(selector) {
         location.href="?action=movie&selectedMovie=" + selector + '&init=true';
 }
 
-function page(url) {
-        updateMovieList(url);
-}
-
 var baseURL = '?action=json&call=getMovieList';
 function updateMovieList(url) {
       if(!url)

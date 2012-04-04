@@ -11,7 +11,7 @@
 //ini_set("display_errors", "on");
 //ini_set("error_reporting", E_ALL); // & ~E_NOTICE);
 
-// Configarion settings
+// Configuration settings
 if(is_file(dirname(__FILE__) . '/lib/config.php')) 
 	require_once dirname(__FILE__) . '/lib/config.php';
 else {
