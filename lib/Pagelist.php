@@ -7,7 +7,7 @@ class Pagelist {
 
 	public function __construct($baseurl) {
 		$this->baseurl = $baseurl;
-		$this->HitsPerPage = 10;
+		$this->HitsPerPage = HPP;
 		$this->ViewPages = 3;
 	}
 

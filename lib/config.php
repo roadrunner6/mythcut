@@ -1,7 +1,7 @@
 <?php
 
 /* ===============================================================
- * MythCut 0.12
+ * MythCut
  * (c) 2011,2012 Mario Weilguni
  * roadrunner6@gmx.at
  * Licenced under GNU General Public Licence Version 3 or higher
@@ -16,3 +16,6 @@ define("TN_HEIGHT", 150);
 define("CACHE_DIR", "/tmp/mythcut-cache");
 define("MPLAYER", "mplayer"); // path to mplayer, normal UNIX $PATH is used
 define("TN_FONT", dirname(__FILE__) .'/../misc/Tiresias Infofont.ttf');
+
+// Hits/Page in the movie list
+define("HPP", 10);

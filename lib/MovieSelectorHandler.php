@@ -12,7 +12,7 @@ class MovieSelectorHandler extends Handler {
 	protected function process(ViewBag $viewbag) {
 		$this->SetView("MovieSelector");
 
-		$viewbag->Query = $search = Param('search');
+		$viewbag->Query = $search = Param('search') == '' ? '' : Param('search');
 
 		if(Param('series') === null) {
 			$series = isset($_COOKIE['__mc_series']) ?

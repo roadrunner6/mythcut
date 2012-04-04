@@ -1,55 +1,32 @@
-<script type="text/javascript">
+<script type="text/javascript" src="js/movieselector.js"></script>
 
-function editMovie(selector) {
-	location.href="?action=movie&selectedMovie=" + selector + '&init=true';
-}
-
-function page(url) {
-	updateMovieList(url);
-}
-
-var baseURL = '?action=json&call=getMovieList';
-function updateMovieList(url) {
-    if(!url)
-        url = baseURL;
-	
-	$.ajax({
-	url: url,
-	success: function(data) {
-		$("#moviecontainer").html('');
-		$(".pagelist").html('');        
-		for(var i in data.data.Movies) {			
-			$("#seriestemplate").tmpl(data.data.Movies[i]).appendTo("#moviecontainer");
-		}
-
-
-		// render pagelist
-		$("#pagelisttemplate").tmpl(data.data.PageList).appendTo(".pagelist");
-	}
-	});
-}
-
-function doSearch() {
-	var query = $("#search").first().val();
-	updateMovieList(baseURL + '&search=' +query);
-}
-
-function filterSeries(name) {
-	updateMovieList(baseURL + '&series=' + name);
-}
-
-$(document).ready(function() {		
-	updateMovieList();
-});
-</script>
+<form id="mainform" method="post" action="">
 
 <div class="main">
 	<div class="title">Select movie</div>
 </div>
 
 <div class="searchbox">
+
+	Items/Page: <select id="hpp">
+	<option selected="selected" value="10">10</option>
+	<option value="25">25</option>
+	<option value="50">50</option>
+	<option value="100">100</option>
+	</select>
+
+	&nbsp;
+	Skip transcoded movies: <input type="checkbox" id="skipTranscoded" value="1" checked="checked"/>
+	Skip movies with cutlists: <input type="checkbox" id="skipHasCutlist" value="1" checked="checked"/>
+	
+	Search: 
 	<input type="text" name="search" id="search" value=""/>
-	<button onClick="doSearch()">Seach</button>
+	<button onclick="doSearch(); return false">Search</button>
+	<br/>
+	<div id="episodeShown" style="display:none">
+	Showing only episodes of this series: <b><span id="episodeShownTitle"/></b> <a href="javascript:showAllMovies()">show all movies</a>
+	<input type="hidden" id="episodeFilter" value=""/>
+	</div>
 </div>
 
 <div class="pagelist right"></div>
@@ -72,7 +49,7 @@ $(document).ready(function() {
 			<div class="series">
 				<span class="seriestitle">${Title}</span> : ${Subtitle}<br/><div class="moviedescription">${Description}</div>
 				Channel: ${Channel}, Size: ${FilesizeGB} GB{{if IsSeries}},
-				<a href="#" onClick="filterSeries('${Title}')" title="View all episodes of this series">Episodes</a>: ${Episodes.NumEpisodes}, Total size: ${Episodes.FilesizeGB} GB 
+				<a href="#" onclick="filterSeries('${Title}')" title="View all episodes of this series">Episodes</a>: ${Episodes.NumEpisodes}, Total size: ${Episodes.FilesizeGB} GB 
 				{{else}}
 				{{/if}}
 				<div class="right">
@@ -84,10 +61,18 @@ $(document).ready(function() {
 
 	<div id="pagelisttemplate">
 	    {{if href.length}}
-	       <a title="Goto page ${Page}" href="#" onClick="page('${href}')">${Label}</a>	        
+	       <a title="Goto page ${Page}" href="#" onclick="page('${href}')">${Label}</a>	        
 	    {{else}}
 	       ${Label}
 	    {{/if}}
 	    &nbsp;
 	</div>	
+
+        <div id="totalhitstemplate">
+	    Movies: ${TotalHits} (${Pages} pages)
+	    &nbsp;
+	    &nbsp;
+	    &nbsp;
+        </div>
 </div>
+</form>

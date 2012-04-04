@@ -48,26 +48,38 @@ class JSONHandler extends MovieHandler {
 	private function getMovieList() {
 		$page = (int)Param("page");
 		if($page < 1 || $page > 10000)
-		$page = 1;
+			$page = 1;
 
-		$search = Param('search');
-		$seriesfilter = Param('series');
-		$skip_cutted = false;
-		$tpp = 10;
+		if(Param("restore") === 'true' && is_object($_SESSION['lastMovieSelection'])) {
+			$params = $_SESSION['lastMovieSelection'];
+		} else {
+  		  $params = new StdClass;
+		  $params->search = Param('search');
+		  $params->series = Param('series');	     
+		  $params->skipTranscoded = Param('skipTranscoded') ? 1 : 0;
+		  $params->skipHasCutlist = Param('skipHasCutlist') ? 1 : 0;
+		  $params->hpp = (int)Param('hpp') > 0 && (int)Param('hpp') <= 1000 ? 
+				(int)Param('hpp') :
+				HPP;
+		}
+		$_SESSION['lastMovieSelection'] = $params;
 
 		$q = new Query("select title, chanid,
 				             unix_timestamp(starttime) as unix,
 				             filesize
 				        from recorded  r
-				       where transcoded = 0
-				         and deletepending = 0");
-
-		if(strlen($seriesfilter) > 0) {
-			$q->Append("and title = :series");
-			$q->series = $seriesfilter;
+				       where deletepending = 0");
+	
+		if($params->skipTranscoded) {
+			$q->Append(" and transcoded=0");
 		}
 
-		$words =preg_split('!\s+!', $search);
+		if(strlen($params->series) > 0) {
+			$q->Append("and title = :series");
+			$q->series = $params->series;
+		}
+
+		$words =preg_split('!\s+!', $params->search);
 		$row=0;
 		foreach($words as $v) {
 			$v = trim(chop($v));
@@ -79,7 +91,7 @@ class JSONHandler extends MovieHandler {
 			}
 		}
 
-		if($skip_cutted) {
+		if($params->skipHasCutlist) {
 			$q->Append(" and not exists (select 1 from recordedmarkup m where m.chanid=r.chanid and m.starttime=r.starttime and m.type in (0,1))");
 		}
 
@@ -95,8 +107,8 @@ class JSONHandler extends MovieHandler {
 		$hits = 0;
 		$series = array();
 		$movies_to_load = array();
-		$range_from = ($page-1) * $tpp;
-		$range_to   = $page * $tpp;
+		$range_from = ($page-1) * $params->hpp;
+		$range_to   = $page * $params->hpp;
 		foreach($q->Execute() as $v) {
 			$c = new StdClass;
 			$c->Chanid = $v->chanid;
@@ -151,7 +163,6 @@ class JSONHandler extends MovieHandler {
 				
 			$q->Append(")");
 
-			//echo "<pre>"; print_r($series); exit;
 			foreach($q->Execute() as $v) {
 				$key = sprintf("%d.%d", $v->chanid, $v->unix);
 				$c = $movies_to_load[$key];
@@ -180,19 +191,22 @@ class JSONHandler extends MovieHandler {
 
 		$result = new StdClass;
 		$result->TotalHits = $hits;
-		$result->Pages = Floor( ($hits + $tpp - 1) / $tpp );
+		$result->Pages = Floor( ($hits + $params->hpp - 1) / $params->hpp );
 		$result->CurrentPage = $page;
-		$result->EntriesPerPage = $tpp;
+		$result->EntriesPerPage = $params->hpp;
 		$result->Movies = array_values($movies_to_load);
 		$result->PageList = array();
 
 		$url = sprintf("?action=json&call=getMovieList&tpp=%d&search=%s&series=%s",
-		$tpp,
-		urlencode($search),
-		urlencode($seriesfilter));
+				$params->hpp,
+				urlencode($params->search),
+				urlencode($params->series));
 		$pagelist = new Pagelist($url);
+		$pagelist->HitsPerPage = $params->hpp;
 		$result->BaseHREF = $url;
 		$result->PageList = $pagelist->Get($result->Pages, $page);
+		
+		$result->Params = $params;
 
 		return $this->successResult($result);
 	}
