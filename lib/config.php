@@ -15,4 +15,4 @@ define("TN_WIDTH", 200);
 define("TN_HEIGHT", 150);
 define("CACHE_DIR", "/tmp/mythcut-cache");
 define("MPLAYER", "mplayer"); // path to mplayer, normal UNIX $PATH is used
-define("TN_FONT", dirname(__FILE__) .'/misc/Tiresias Infofont.ttf');
+define("TN_FONT", dirname(__FILE__) .'/../misc/Tiresias Infofont.ttf');
