@@ -58,6 +58,15 @@
       return false;
   }
 
+  function formatDate(s) {
+	var rx = /^\/Date\((\d+)\)\/$/;
+	rx.exec(s);
+	var i = parseInt(RegExp.$1);
+	var s = "new Date(" + i + ")";
+	var d = eval(s);
+	return d.toLocaleDateString() + " " + d.toLocaleTimeString();
+  }
+
 if(!console) {
 	console = {
 		log: function() {

@@ -55,6 +55,7 @@
 				<div class="right">
 					<a onclick="editMovie('${Selector}')" href="#">Edit movie</a>
 				</div>
+				${formatDate(Date)}
 			</div>			
 		</div>
 	</div>

@@ -53,7 +53,7 @@ require_once dirname(__FILE__) . '/lib/MovieSelectorHandler.php';
 require_once dirname(__FILE__) . '/lib/MovieStripeHandler.php';
 require_once dirname(__FILE__) . '/lib/SaveCutlistHandler.php';
 
-define("VERSION", "0.14");
+define("VERSION", "0.15");
 
 // CPU Type/Architecture
 if((string)PHP_INT_MAX == '9223372036854775807') {

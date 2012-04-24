@@ -45,7 +45,7 @@ function doSearch() {
 }
 
 function filterSeries(name) {
-	$("#episodeFilter").attr("value", name);
+	$("#episodeFilter").attr("value", encodeURIComponent(name));
         updateMovieList(baseURL);
 }
 

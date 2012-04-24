@@ -42,12 +42,7 @@ class MovieHandler extends Handler {
 	protected function handleActions() {
 		if(Param('useCommercialBreaks')) {
 			$this->movie->useCommercialBreaks = true;
-		}
-
-		if(Param("change_subtitle")) {
-			$this->movie->setSubtitle(Param("subtitle"));
-			header("Location: index.php");
-			exit;
+			$_SESSION['list'] = $this->movie->getSeekTable();
 		}
 
 		if(Param('expandLeft')) {

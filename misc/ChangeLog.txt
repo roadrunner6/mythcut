@@ -1,3 +1,7 @@
+0.15  2012-04-24
+* Commercial breaks now work
+* View recording date
+
 0.14  2012-04-04
 * Got rid of PHP class autoloading
 * Restructured JS and CSS

@@ -187,8 +187,6 @@ class JSONHandler extends MovieHandler {
 			}
 		}
 
-
-
 		$result = new StdClass;
 		$result->TotalHits = $hits;
 		$result->Pages = Floor( ($hits + $params->hpp - 1) / $params->hpp );
