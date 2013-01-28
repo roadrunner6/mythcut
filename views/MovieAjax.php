@@ -26,8 +26,8 @@
             <a href="javascript:tnAction('cutRight', '')">Cut right</a><br/>
             <a id="del_cutpoint" href="javascript:tnAction('deleteCutpoint', '')">Delete cutpoint</a><br/>
 
-<!--	    <a href="javascript:moveCutpoint(-1)" title="Move cut start">Move cut start</a><br/>
-	    <a href="javascript:moveCutpoint(1)" title="Move cut end">Move cut end</a><br/> -->
+	    <a href="javascript:tnAction('moveCutStart', '')" title="Move cut start">Move cut start</a><br/>
+	    <a href="javascript:tnAction('moveCutEnd', '')" title="Move cut end">Move cut end</a><br/> 
 	    <a href="javascript:tnAction('moveCutpoint','')" title="Move the nearest cutpoint (if any) to this position">Move cutpoint</a><br/>
             </p>
         </div>

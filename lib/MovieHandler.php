@@ -69,8 +69,16 @@ class MovieHandler extends Handler {
 			$this->list->deleteCutpoint(Param('deleteCutpoint'));
 		}
 
+		if(Param('moveCutStart')) {
+			$this->list->moveCutpoint(Param('moveCutStart'), 1);
+		}
+
+		if(Param('moveCutEnd')) {
+			$this->list->moveCutpoint(Param('moveCutEnd'), -1);
+		}
+
 		if(Param('moveCutpoint')) {
-			$this->list->moveCutpoint(Param('moveCutpoint'));
+			$this->list->moveCutpoint(Param('moveCutpoint'), 0);
 		}
 	}
 

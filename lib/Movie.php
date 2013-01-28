@@ -379,16 +379,22 @@ class Movie {
 	}
 
 	private function findStream() {
+		Log::Debug("Searching stream for recording %d/%d (%s), storagegroup=%s",
+	                   $this->chanid, $this->starttime, $this->moviedata->title, 
+			   $this->moviedata->storagegroup);
 		$q = new Query("select dirname
                          from storagegroup 
                         where groupname = :storagegroup");
 		$q->storagegroup = $this->moviedata->storagegroup;
 		foreach($q->Execute() as $v) {
 			$fname = sprintf("%s/%s", $v->dirname, $this->moviedata->basename);
+			Log::Debug("\tlooking for stream here: %s", $fname);
 			if(is_file($fname)) {
+				Log::Debug("\tfound stream here: %s", $fname);
 				return $fname;
 			}
 		}
+		Log::Debug("\tfailed to find stream for recording");
 		return null;
 	}
 

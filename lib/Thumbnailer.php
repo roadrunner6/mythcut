@@ -27,6 +27,9 @@ class Thumbnailer {
 		$this->channel_id = $channel_id;
 		$this->starttime = $starttime;
 		$this->stream = $stream;
+		if(!is_file($stream) || !is_readable($stream)) {
+			throw new Exception(sprintf("File not found or unreadable (%s)", (string)$stream));
+		}
 	}
 
 	public function width() {
@@ -59,6 +62,7 @@ class Thumbnailer {
 	private function handleRequest($offset, $time) {
 		Log::SetPrefix(sprintf("Thumbnail(%d): ", getmypid()));
 		$hash = $this->getHash();
+
 		if(isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $hash) {
 			header(getenv("SERVER_PROTOCOL") . " 304 Not Modified");
 			header("Content-Length: 0");
