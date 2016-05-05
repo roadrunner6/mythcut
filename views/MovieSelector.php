@@ -18,6 +18,7 @@
 	&nbsp;
 	Skip transcoded movies: <input type="checkbox" id="skipTranscoded" value="1" checked="checked"/>
 	Skip movies with cutlists: <input type="checkbox" id="skipHasCutlist" value="1" checked="checked"/>
+	Skip LiveTV: <input type="checkbox" id="skipLiveTV" value="1" checked="checked"/>
 	
 	Search: 
 	<input type="text" name="search" id="search" value=""/>

@@ -66,9 +66,11 @@ class MovieSelectorHandler extends Handler {
 
 
 		$q = new Query("select *,
-		             unix_timestamp(starttime) as unix
+		             /* CONVERT_TZ('startime','UTC','SYSTEM') as unix */
+				unix_timestamp('startime') as unix 
 		        from recorded  r
 		       where transcoded = 0
+			 /* and not storagegroup = 'LiveTV' */
 		         and deletepending = 0");
 
 		if($series) {

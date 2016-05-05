@@ -306,7 +306,7 @@ class Movie {
 								:chanid, :starttime, CURRENT_TIMESTAMP,
 								1, 0, 1, 1,
 								CURRENT_TIMESTAMP, '', '', 'Queued via MythCut',
-								CURRENT_TIMESTAMP
+								UTC_TIMESTAMP
 							)");
 		$q->chanid = $this->chanid;
 		$q->starttime = $this->getStarttimeSQL();
