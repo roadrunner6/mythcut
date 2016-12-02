@@ -109,6 +109,8 @@ class Thumbnailer {
 		$infile->close();
 		$tempfile->write($data);
 
+		Log::Debug("Tempfile we read for the image=%s", $tempfile->Filename());
+
 		$cmd = sprintf("%s -nolirc -really-quiet -zoom -quiet -xy %d -vo jpeg:outdir=%s:maxfiles=2 -ao null %s -frames 2 &> /dev/null",
 				MPLAYER,
 				$this->width(),
@@ -117,6 +119,7 @@ class Thumbnailer {
 		$ts = microtime(true);
 		Log::Debug("command=%s", $cmd);
 		exec($cmd);
+		Log::Debug("back from command=%s", $cmd);
 		$elapsed = microtime(true) - $ts;
 		Log::Debug("command executed, duration=%.6f sec", $elapsed);
 		$tempfile = $this->chooseBestImage($outdir);
@@ -125,6 +128,8 @@ class Thumbnailer {
 			Log::Error("command failed, command was %s", $cmd);
 			header("HTTP/1.0 404 not found");
 			exit;
+		} else {
+			Log::Debug("Command success, image even exists: %s", $tempfile);
 		}
 
 		$im = @imagecreatefromjpeg($tempfile);
@@ -132,10 +137,13 @@ class Thumbnailer {
 			     	      floor($time/3600),
  		                      floor(($time % 3600)/60),
 		                      $time % 60);
+		Log::Debug("calling writeTextAligned: %s, %s, %s, %s", $im, self::ALIGN_LEFT, self::ALIGN_TOP, $timestring);
 		$this->writeTextAligned($im, self::ALIGN_LEFT, self::ALIGN_TOP, $timestring);
+		Log::Debug("Finished writeText for time: %s", $timestring);
 
 		ob_start();
-		imagejpeg($im, '', 60);
+		$didMakeImage = imagejpeg($im, NULL, 60);
+		Log::Debug("Did imagejpeg work? %s", $didMakeImage);
 		$data = ob_get_contents();
 		ob_end_clean();
 
@@ -179,6 +187,7 @@ class Thumbnailer {
 	}
 
 	private function cleanDirectory($dir) {
+		Log::Debug("CleanDirectory %s", $dir);
 		$fn = $dir . '/00000001.jpg';
 		Log::Debug($fn);
 		if(is_file($fn)) unlink($fn);
