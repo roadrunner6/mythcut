@@ -12,6 +12,7 @@ function updateMovieList(url) {
             url = baseURL;
 	url += '&skipTranscoded=' + ($("#skipTranscoded").is(":checked")?1:0);
 	url += '&skipHasCutlist=' + ($("#skipHasCutlist").is(":checked")?1:0);
+	url += '&skipLiveTV=' + ($("#skipLiveTV").is(":checked")?1:0);
 	url += '&series=' + $("#episodeFilter").val();
 	url += '&hpp=' + $("#hpp").val();
 
@@ -31,6 +32,7 @@ function updateMovieList(url) {
 		$("#search").attr("value", data.data.Params.search);
 		$("#skipTranscoded").attr("checked", data.data.Params.skipTranscoded == 1);
 		$("#skipHasCutlist").attr("checked", data.data.Params.skipHasCutlist == 1);
+		$("#skipLiveTV").attr("checked", data.data.Params.skipLiveTV == 1);
 		$("#hpp").val(data.data.Params.hpp);
 		$("#episodeFilter").val(data.data.Params.series);
 		$("#episodeShownTitle").html(data.data.Params.series);

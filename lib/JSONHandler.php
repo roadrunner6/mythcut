@@ -58,6 +58,7 @@ class JSONHandler extends MovieHandler {
 		  $params->series = Param('series');	     
 		  $params->skipTranscoded = Param('skipTranscoded') ? 1 : 0;
 		  $params->skipHasCutlist = Param('skipHasCutlist') ? 1 : 0;
+		  $params->skipLiveTV = Param('skipLiveTV') ? 1 : 0;
 		  $params->hpp = (int)Param('hpp') > 0 && (int)Param('hpp') <= 1000 ? 
 				 (int)Param('hpp') :
 				 HPP;
@@ -66,12 +67,18 @@ class JSONHandler extends MovieHandler {
 
 		$q = new Query("select title, chanid,
 				             unix_timestamp(starttime) as unix,
+					     /* CONVERT_TZ('startime','UTC','SYSTEM') as unix, */
 				             filesize
 				        from recorded  r
 				       where deletepending = 0");
 	
+		if($params->skipLiveTV) {
+                        $q->Append(" and not storagegroup = 'LiveTV'");
+		}
+
 		if($params->skipTranscoded) {
 			$q->Append(" and transcoded=0");
+
 		}
 
 		if(strlen($params->series) > 0) {
@@ -156,7 +163,7 @@ class JSONHandler extends MovieHandler {
 			foreach($movies_to_load as $v) {
 				$row++;
 				$q->Set("chanid" . $row, $v->Chanid);
-				$q->Set("starttime" . $row, date("Y-m-d H:i:s", $v->Unixtime));
+				$q->Set("starttime" . $row, strftime(date("Y-m-d H:i:s", $v->Unixtime)));
 				$q->Append(sprintf(" or (r.chanid = :chanid%d and r.starttime=:starttime%s)", $row, $row));
 			}
 			unset($v);
