@@ -341,8 +341,9 @@ class Movie {
 		return ($v >= 1 && $v <= 2147483647);
 	}
 
-	private function findNearestKeyframeMark($mark, $direction) {
-		$q = new Query(sprintf("select mark
+	private function findNearestKeyframeMark($mark, $direction)
+    {
+        $q = new Query(sprintf("select mark
                                 from recordedseek 
                             where chanid = :chanid
                                 and starttime = :starttime
@@ -350,14 +351,21 @@ class Movie {
                                 and mark %s :mark1
                                 and mark %s :mark2
                             order by abs(:mark1 - mark) limit 1",
-		$direction < 0 ? '<=' : '>=',
-		$direction < 0 ? '>=' : '<='));
-		$q->chanid = $this->chanid;
-		$q->starttime = date('Y-m-d H:i:s', $this->starttime);
-		$q->mark1 = $mark;
-		$q->mark2 = $mark + ($direction < 0 ? -1 : 1) * 100;
+            $direction < 0 ? '<=' : '>=',
+            $direction < 0 ? '>=' : '<='));
+        $q->chanid = $this->chanid;
+        $q->starttime = date('Y-m-d H:i:s', $this->starttime);
+        $q->mark1 = $mark;
+        $q->mark2 = $mark + ($direction < 0 ? -1 : 1) * 100;
 
-		return $q->Result();
+        # Check return value, and return $mark itself if needed, but never 'empty' or 'null'
+        $resFrame = $mark;
+        try {
+            $resFrame = $q->Result();
+        } catch (Exception $e) {
+            Log::Warning("Tried to find keyframe past end of seektable: %s", $e->getMessage());
+        }
+		return $resFrame;
 	}
 
 	private function insertCutpoint($mark, $type) {
